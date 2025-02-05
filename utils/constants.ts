@@ -1,0 +1,1 @@
+export const baseURL = "https://snapix-backend.vercel.app/api";
