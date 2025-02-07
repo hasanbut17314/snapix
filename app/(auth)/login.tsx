@@ -11,10 +11,24 @@ export default function Login() {
         identifier: '',
         password: '',
     });
-    const [errors, setErrors] = useState({
+    const [errors, setErrors] = useState<{ [key: string]: string }>({
         identifier: '',
         password: '',
     });
+
+    const handleChangeText = (name: string, text: string) => {
+        setFormData({
+            ...formData,
+            [name]: text,
+        });
+
+        if (errors[name]) {
+            setErrors({
+                ...errors,
+                [name]: '',
+            });
+        }
+    };
 
     const handleLogin = () => {
         // Validate form
@@ -56,22 +70,22 @@ export default function Login() {
                 {/* Form Section */}
                 <View className="space-y-4">
                     <Input
+                        name='identifier'
                         label="Username or Email"
                         placeholder="Enter your username or email"
                         value={formData.identifier}
-                        onChangeText={(text) =>
-                            setFormData(prev => ({ ...prev, identifier: text }))}
+                        onChangeText={handleChangeText}
                         error={errors.identifier}
                         touched={true}
                         icon="person-outline"
                         required
                     />
                     <Input
+                        name='password'
                         label="Password"
                         placeholder="Enter your password"
                         value={formData.password}
-                        onChangeText={(text) =>
-                            setFormData(prev => ({ ...prev, password: text }))}
+                        onChangeText={handleChangeText}
                         secureTextEntry
                         error={errors.password}
                         touched={true}

@@ -16,7 +16,7 @@ interface ButtonProps {
 
 const Button = ({
     children,
-    activeOpacity = 0.4,
+    activeOpacity = 0.8,
     containerClassName,
     textClassName,
     onPress,

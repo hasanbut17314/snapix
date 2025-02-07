@@ -5,7 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 interface InputProps {
     label: string;
     value: string;
-    onChangeText: (text: string) => void;
+    name: string;
+    onChangeText: (text: string, name: string) => void;
     placeholder: string;
     secureTextEntry?: boolean;
     error?: string;
@@ -21,6 +22,7 @@ interface InputProps {
 export default function Input({
     label,
     value,
+    name,
     onChangeText,
     placeholder,
     secureTextEntry,
@@ -62,6 +64,10 @@ export default function Input({
 
     const handleContainerPress = () => {
         inputRef.current?.focus();
+    };
+
+    const handleChange = (text: string) => {
+        onChangeText(name, text);
     };
 
     return (
@@ -114,7 +120,7 @@ export default function Input({
                         className={`flex-1 px-4 py-4 dark:text-gray-300 text-black ${icon ? 'pl-2' : 'pl-4'}
                             ${multiline ? 'h-24' : 'h-[52px]'} rounded-xl text-lg`}
                         value={value}
-                        onChangeText={onChangeText}
+                        onChangeText={handleChange}
                         onFocus={handleFocus}
                         onBlur={handleBlur}
                         placeholder={isFocused ? placeholder : ''}
