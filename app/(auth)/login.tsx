@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { Link, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import CustomInput from '@/components/ui/Input';
+import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 
 // TODO: Check for KeyboardAwareScrollView library for keyboard handling
 export default function Login() {
@@ -32,7 +33,7 @@ export default function Login() {
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            className="flex-1 bg-white"
+            className="flex-1 bg-white dark:bg-gray-900"
         >
             <ScrollView
                 className="flex-1"
@@ -40,21 +41,21 @@ export default function Login() {
                 keyboardShouldPersistTaps="handled"
             >
                 {/* Header Section */}
-                <View className="items-center mb-8">
-                    <View className="w-16 h-16 bg-blue-500 rounded-full items-center justify-center mb-4">
+                <View className="items-center mb-10">
+                    <View className="w-16 h-16 bg-primary rounded-full items-center justify-center mb-4">
                         <Ionicons name="logo-ionic" size={40} color="white" />
                     </View>
-                    <Text className="text-2xl font-bold text-gray-800">
+                    <Text className="text-2xl font-bold text-gray-800 dark:text-white">
                         Welcome Back!
                     </Text>
-                    <Text className="text-gray-500 mt-2 text-center">
+                    <Text className="text-gray-500 dark:text-gray-300 mt-2 text-center">
                         Please sign in to continue
                     </Text>
                 </View>
 
                 {/* Form Section */}
                 <View className="space-y-4">
-                    <CustomInput
+                    <Input
                         label="Username or Email"
                         placeholder="Enter your username or email"
                         value={formData.identifier}
@@ -65,7 +66,7 @@ export default function Login() {
                         icon="person-outline"
                         required
                     />
-                    <CustomInput
+                    <Input
                         label="Password"
                         placeholder="Enter your password"
                         value={formData.password}
@@ -89,18 +90,16 @@ export default function Login() {
                     </TouchableOpacity>
 
                     {/* Login Button */}
-                    <TouchableOpacity
+                    <Button
                         onPress={handleLogin}
-                        className="bg-primary py-3 rounded-xl mt-6 shadow-sm"
+                        containerClassName="mt-6"
                     >
-                        <Text className="text-white text-center font-semibold text-lg">
-                            Sign In
-                        </Text>
-                    </TouchableOpacity>
+                        Sign In
+                    </Button>
 
                     {/* Register Link */}
                     <View className="flex-row justify-center mt-6">
-                        <Text className="text-gray-600">
+                        <Text className="text-gray-600 dark:text-gray-400">
                             Don't have an account?{' '}
                         </Text>
                         <Link href="/(auth)/register" asChild>
