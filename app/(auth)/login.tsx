@@ -4,6 +4,8 @@ import { Link, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import Toast from 'react-native-toast-message';
+import { useLoginMutation } from '@/services/authApi';
 
 // TODO: Check for KeyboardAwareScrollView library for keyboard handling
 export default function Login() {
@@ -30,8 +32,9 @@ export default function Login() {
         }
     };
 
-    const handleLogin = () => {
-        // Validate form
+    const [login, { isLoading }] = useLoginMutation();
+
+    const handleLogin = async () => {
         const newErrors = {
             identifier: !formData.identifier ? 'Username or email is required' : '',
             password: !formData.password ? 'Password is required' : '',
@@ -39,8 +42,19 @@ export default function Login() {
         setErrors(newErrors);
 
         if (!newErrors.identifier && !newErrors.password) {
-            // Implement your login logic here
-            console.log('Login with:', formData);
+            try {
+                await login(formData).unwrap();
+                router.replace('/(tabs)')
+            } catch (e: any) {
+                const errorMsg = e?.data?.message || e?.data || 'Login Failed! Please try again';
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: errorMsg,
+                })
+                console.log(e);
+
+            }
         }
     };
 
@@ -106,6 +120,8 @@ export default function Login() {
                     {/* Login Button */}
                     <Button
                         onPress={handleLogin}
+                        disabled={isLoading}
+                        isLoading={isLoading}
                         containerClassName="mt-6"
                     >
                         Sign In

@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
+import Toast from "react-native-toast-message";
 import "../global.css";
 
 export default function RootLayout() {
@@ -14,16 +15,19 @@ export default function RootLayout() {
 function RootLayoutNav() {
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="post/[id]"
-        options={{
-          headerShown: true,
-          headerTitle: "Post Details"
-        }}
-      />
-    </Stack>
+    <>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="post/[id]"
+          options={{
+            headerShown: true,
+            headerTitle: "Post Details"
+          }}
+        />
+      </Stack>
+      <Toast />
+    </>
   );
 }

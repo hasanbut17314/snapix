@@ -3,7 +3,9 @@ import React, { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
+import { useRegisterMutation } from '@/services/authApi'
+import Toast from 'react-native-toast-message'
 
 interface FormData {
     username: string;
@@ -87,13 +89,29 @@ const register = () => {
         return errors;
     };
 
-    const handleRegister = () => {
+    const [registerUser, { isLoading }] = useRegisterMutation();
+
+    const handleRegister = async () => {
         const newErrors = validateForm(formData);
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length === 0) {
-            // Implement your registration logic here
-            console.log('Register with:', formData);
+            try {
+                await registerUser(formData).unwrap();
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: 'Registeration successful! Login to continue',
+                })
+                router.replace('/(auth)/login');
+            } catch (e: any) {
+                const errorMsg = e?.data?.message || e?.data || 'Registeration Failed! Please try again';
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: errorMsg,
+                })
+            }
         }
     }
 
@@ -169,9 +187,11 @@ const register = () => {
                         required
                     />
 
-                    {/* Login Button */}
+                    {/* Sign Up Button */}
                     <Button
                         onPress={handleRegister}
+                        disabled={isLoading}
+                        isLoading={isLoading}
                         containerClassName="mt-6"
                     >
                         Sign Up
