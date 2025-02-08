@@ -6,6 +6,7 @@ import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import Toast from 'react-native-toast-message';
 import { useLoginMutation } from '@/services/authApi';
+import { secureStorage } from '@/utils/secureStorage';
 
 // TODO: Check for KeyboardAwareScrollView library for keyboard handling
 export default function Login() {
@@ -33,6 +34,7 @@ export default function Login() {
     };
 
     const [login, { isLoading }] = useLoginMutation();
+    const { setTokens, setUser } = secureStorage
 
     const handleLogin = async () => {
         const newErrors = {
@@ -43,7 +45,9 @@ export default function Login() {
 
         if (!newErrors.identifier && !newErrors.password) {
             try {
-                await login(formData).unwrap();
+                const response = await login(formData).unwrap();
+                await setTokens(response?.data?.accessToken, response?.data?.refreshToken);
+                await setUser(response?.data?.user);
                 router.replace('/(tabs)')
             } catch (e: any) {
                 const errorMsg = e?.data?.message || e?.data || 'Login Failed! Please try again';

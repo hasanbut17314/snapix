@@ -1,9 +1,59 @@
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Pressable, Text, useColorScheme, View } from "react-native";
+import { useLogoutMutation } from "@/services/authApi";
+import useAuth from "@/hooks/useAuth";
+import Toast from "react-native-toast-message";
 
 export default function TabLayout() {
+
+    const isDark = useColorScheme() === "dark";
+
+    const [logout, { isLoading }] = useLogoutMutation();
+    const { logout: logoutUserLocally } = useAuth();
+
+    const handleLogout = async () => {
+        try {
+            await logout({}).unwrap();
+            await logoutUserLocally();
+            router.replace("/(auth)/login");
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Logout Failed! Please try again',
+            })
+            console.log(error);
+        }
+    };
+
     return (
-        <Tabs screenOptions={{ headerShown: false }}>
+        <Tabs
+            screenOptions={{
+                tabBarActiveTintColor: "#168aad",
+                headerStyle: {
+                    backgroundColor: isDark ? "#111827" : "#ffffff",
+                },
+                headerTitleStyle: {
+                    color: isDark ? "#ffffff" : "#111827",
+                },
+                tabBarStyle: {
+                    backgroundColor: isDark ? "#111827" : "#ffffff",
+                },
+                tabBarLabelStyle: {
+                    color: isDark ? "#ffffff" : "#1f2937",
+                },
+                tabBarInactiveTintColor: isDark ? "#ffffff" : "#1f2937",
+                headerTitle: "Snapix",
+                headerRight: () =>
+                    <View className="px-4">
+                        <Pressable className="flex-row items-center gap-2" onPress={handleLogout} disabled={isLoading}>
+                            <Ionicons name="log-out-outline" size={24} color={isDark ? "#ffffff" : "#1f2937"} />
+                            <Text className="text-black dark:text-white">Logout</Text>
+                        </Pressable>
+                    </View>
+            }}
+        >
             <Tabs.Screen
                 name="index"
                 options={{
@@ -32,7 +82,7 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="notifications"
+                name="notification"
                 options={{
                     title: "Notifications",
                     tabBarIcon: ({ color, size }) => (
