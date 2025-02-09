@@ -13,8 +13,18 @@ export const postApi = createApi({
                 method: "GET",
             }),
             providesTags: ["Post"],
+        }),
+        toggleLike: builder.mutation({
+            query: ({ postId }) => ({
+                url: `/post/toggleLike/${postId}`,
+                method: "POST",
+            }),
+            invalidatesTags: ["Post"],
         })
     }),
 });
 
-export const { useGetPostsQuery } = postApi;
+export const {
+    useGetPostsQuery,
+    useToggleLikeMutation
+} = postApi;

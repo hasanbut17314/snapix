@@ -32,13 +32,15 @@ export default function TabLayout() {
             screenOptions={{
                 tabBarActiveTintColor: "#168aad",
                 headerStyle: {
-                    backgroundColor: isDark ? "#111827" : "#ffffff",
+                    backgroundColor: isDark ? "#27272a" : "#ffffff",
+                    borderBottomColor: isDark ? "#6b7280" : "#27272a",
+                    borderBottomWidth: isDark ? 1 : 0,
                 },
                 headerTitleStyle: {
                     color: isDark ? "#ffffff" : "#111827",
                 },
                 tabBarStyle: {
-                    backgroundColor: isDark ? "#111827" : "#ffffff",
+                    backgroundColor: isDark ? "#27272a" : "#ffffff",
                 },
                 tabBarLabelStyle: {
                     color: isDark ? "#ffffff" : "#1f2937",
