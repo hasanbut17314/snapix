@@ -1,10 +1,11 @@
 import { View, Text, Pressable, Image, useColorScheme } from 'react-native';
-import React, { memo, useState, useCallback, useMemo } from 'react';
+import React, { memo, useState, useCallback, useMemo, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { getRelativeTime } from '@/utils/formatDate';
 import { useToggleLikeMutation } from '@/services/postApi';
 import { PostTypes } from '@/types/PostTypes';
 import useAuth from '@/hooks/useAuth';
+import { router } from 'expo-router';
 
 const PostCard = ({
     _id,
@@ -19,12 +20,20 @@ const PostCard = ({
 
     const { user } = useAuth();
     const userId = user?._id;
-    const postLiked = useMemo(() => likes?.some(like => like._id === userId), [likes, userId]);
+    const postLiked = useMemo(() =>
+        likes?.some(like => like._id === userId),
+        [likes, userId]
+    );
 
     const isDark = useColorScheme() === "dark";
-    const [isLiked, setIsLiked] = useState(postLiked || false);
+    const [isLiked, setIsLiked] = useState<boolean>(postLiked);
     const [likesCount, setLikesCount] = useState(likes?.length || 0);
     const [toggleLike] = useToggleLikeMutation();
+
+    useEffect(() => {
+        setIsLiked(postLiked);
+        setLikesCount(likes?.length || 0);
+    }, [postLiked, likes?.length]);
 
     const handleLike = useCallback(async () => {
         try {
@@ -41,7 +50,10 @@ const PostCard = ({
     }, [_id, isLiked]);
 
     const renderUserInfo = useCallback(() => (
-        <View className="flex flex-row gap-3 items-center px-3">
+        <Pressable
+            className="flex flex-row gap-3 items-center px-3"
+            onPress={() => router.push(`/post/${_id}`)}
+        >
             <Image
                 className="h-11 w-11 rounded-full"
                 source={{ uri: owner?.profilePic }}
@@ -54,7 +66,7 @@ const PostCard = ({
                     {getRelativeTime(createdAt)}
                 </Text>
             </View>
-        </View>
+        </Pressable>
     ), [owner, createdAt]);
 
     const renderContent = useCallback(() => (
@@ -103,7 +115,7 @@ const PostCard = ({
                 <Text className="text-black dark:text-white text-sm">Like</Text>
             </Pressable>
 
-            <Pressable className="flex-row items-center gap-2">
+            <Pressable className="flex-row items-center gap-2" onPress={() => router.push(`/post/${_id}/comments`)}>
                 <Ionicons
                     name="chatbubble-outline"
                     size={22}
