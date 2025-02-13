@@ -6,6 +6,7 @@ import { useToggleLikeMutation } from '@/services/postApi';
 import { PostTypes } from '@/types/PostTypes';
 import useAuth from '@/hooks/useAuth';
 import { router } from 'expo-router';
+import CommentModal from './CommentModal';
 
 const PostCard = ({
     _id,
@@ -24,6 +25,11 @@ const PostCard = ({
         likes?.some(like => like._id === userId),
         [likes, userId]
     );
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const handleCloseModal = useCallback(() => {
+        setModalVisible(false);
+    }, []);
 
     const isDark = useColorScheme() === "dark";
     const [isLiked, setIsLiked] = useState<boolean>(postLiked);
@@ -115,7 +121,9 @@ const PostCard = ({
                 <Text className="text-black dark:text-white text-sm">Like</Text>
             </Pressable>
 
-            <Pressable className="flex-row items-center gap-2" onPress={() => router.push(`/post/${_id}/comments`)}>
+            <Pressable
+                className="flex-row items-center gap-2"
+                onPress={() => setModalVisible(true)}>
                 <Ionicons
                     name="chatbubble-outline"
                     size={22}
@@ -133,6 +141,12 @@ const PostCard = ({
             {renderMedia()}
             {renderStats()}
             {renderActions()}
+            <CommentModal
+                postId={_id}
+                userId={owner?._id}
+                isOpen={modalVisible}
+                onClose={handleCloseModal}
+            />
         </View>
     );
 };

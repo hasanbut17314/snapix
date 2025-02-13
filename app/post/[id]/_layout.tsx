@@ -15,9 +15,9 @@ const PostLayout = () => {
             <Stack.Screen
                 name="comments"
                 options={{
-                    presentation: 'formSheet',
-                    sheetGrabberVisible: true,
-                    sheetAllowedDetents: [0.85, 1],
+                    presentation: 'formSheet', // Use 'modal' for a full-screen swipe-up modal experience
+                    sheetGrabberVisible: true, // Show a grabber to drag the sheet
+                    sheetAllowedDetents: [0.25, 0.85, 1], // Define the height breakpoints for the modal (bottom, middle, full-screen)
                     headerShown: true,
                     headerStyle: {
                         backgroundColor: isDark ? '#1a1a1a' : '#ffffff',
@@ -33,12 +33,12 @@ const PostLayout = () => {
                     contentStyle: {
                         backgroundColor: isDark ? '#000000' : '#ffffff',
                     },
-                    // For iOS
-                    gestureEnabled: true,
-                    gestureDirection: 'vertical',
-                    animation: 'slide_from_bottom',
+                    gestureEnabled: true, // Allow gesture swipe to dismiss modal
+                    gestureDirection: 'vertical', // Enable vertical gestures for the modal
+                    animation: 'slide_from_bottom', // Slide-up animation from the bottom
                 }}
             />
+
             <Stack.Screen
                 name="edit"
                 options={{

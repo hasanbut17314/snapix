@@ -20,11 +20,19 @@ export const postApi = createApi({
                 method: "POST",
             }),
             invalidatesTags: ["Post"],
-        })
+        }),
+        getComments: builder.query({
+            query: ({ postId }) => ({
+                url: `/post/getComments/${postId}`,
+                method: "GET",
+            }),
+            providesTags: ["Post"],
+        }),
     }),
 });
 
 export const {
     useGetPostsQuery,
-    useToggleLikeMutation
+    useToggleLikeMutation,
+    useGetCommentsQuery
 } = postApi;

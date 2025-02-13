@@ -17,6 +17,7 @@ interface InputProps {
     maxLength?: number;
     required?: boolean;
     icon?: keyof typeof Ionicons.glyphMap;
+    containerClassName?: string;
 }
 
 export default function Input({
@@ -34,6 +35,7 @@ export default function Input({
     maxLength,
     required = false,
     icon,
+    containerClassName
 }: InputProps) {
     const [isFocused, setIsFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -71,7 +73,7 @@ export default function Input({
     };
 
     return (
-        <View className="w-full mb-6">
+        <View className={`${containerClassName} w-full mb-6`}>
             <TouchableOpacity
                 activeOpacity={1}
                 onPress={handleContainerPress}
